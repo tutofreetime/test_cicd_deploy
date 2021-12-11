@@ -1,0 +1,56 @@
+version: '3.7'
+
+services:
+
+  client:
+    build: ./client
+    volumes:
+      - ./client:/client
+      - ./client/node_modules
+    ports:
+      - "3000:3000"
+    environment:
+      - PORT=3000
+#    command:
+#      - yarn dev
+    restart: always
+    depends_on:
+      - server
+
+  server:
+    build:
+      context: ./server
+      args:
+        - NODE_ENV=development
+    # This is my Docker image in the Docker hub
+    image: tutofree/countofmoney
+    volumes:
+      - ./server:/server
+      - ./server/node_modules
+    ports:
+      - "9000:9000"
+    environment:
+      - PORT=9000
+      - NODE_ENV=development
+      - MONGO_USER=api_db
+      - MONGO_PASSWORD=api_db
+      - SESSION_SECRET="0SB}%)sp8<v)/d9*W2/s[t-dGw<4Gu1}bF1AuC?wqvi@Z%{FCm0&FemRgw<|2NuQ"
+#    command:
+#      - yarn dev
+    depends_on:
+      - mongo
+    restart: always
+
+  mongo:
+    image: mongo
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=api_db
+      - MONGO_INITDB_ROOT_PASSWORD=api_db
+    volumes:
+      - mongo-db:/data/db
+
+#  redis:
+#    image: redis
+
+volumes:
+  mongo-db:
