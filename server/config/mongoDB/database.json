@@ -1,0 +1,31 @@
+/* Create User in MongoDB*/
+db.createUser(
+  {
+    user: "api_db",
+    pwd: "api_db",
+    roles: [ { role: "userAdminAnyDatabase", db: "admin" } ]
+  }
+)
+
+//Create Database
+use api_db
+
+// Create Table
+db.createCollection("users")
+db.createCollection("articles")
+db.createCollection("crypto_currencies")
+
+//Relationships
+
+
+//Insertions
+
+// Drops Collections or tables
+db.users.drop()
+db.articles.drop()
+db.crypto_currencies.drop()
+
+
+// Create port
+mongodump --uri "mongodb://api_db:api_db@mongodb0.example.com:<Port>,mongodb1.example.com:<Port1>,mongodb2.example.com:<Port2>/?replicaSet=<ReplicaSetName>&authSource=admin" \
+--archive
